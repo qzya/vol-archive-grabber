@@ -1,4 +1,3 @@
-from genericpath import isdir
 import os, requests
 from bs4 import BeautifulSoup as bs
 
