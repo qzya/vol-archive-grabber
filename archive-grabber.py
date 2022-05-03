@@ -1,32 +1,39 @@
 import os, requests
+from tracemalloc import stop
 from bs4 import BeautifulSoup as bs
 
 base_url = 'https://gosarchive.gov35.ru/archive1/unit/'
 images_url = 'https://gosarchive.gov35.ru/archive1/image/'
 headers = {}
 
-arch_id = '410045'
+while True:
+    arch_id = input('Введите номер дела:\n')
+    if not arch_id.isdigit() or len(arch_id) > 6:
+        print('Не более 6 цифр')
+        continue
+    else:
+        # request the main page of the document:
+        main_response = requests.get(base_url + arch_id, headers=headers)
 
-# request the main page of the document:
-main_response = requests.get(base_url + arch_id, headers=headers)
+        # set cookies, parse and save description, make directories
+        if (main_response.status_code == 200):
+            # get coockies from response and set for global headers to use in get_images() function
+            for cookie in main_response.cookies:
+                if cookie.name == 'PHPSESSID':
+                    headers['Cookie'] = f'{cookie.name}={cookie.value}'
 
-# set cookies, parse and save description, make directories
-if (main_response.status_code == 200):
-    # get coockies from response and set for global headers to use in get_images() function
-    for cookie in main_response.cookies:
-        if cookie.name == 'PHPSESSID':
-            headers['Cookie'] = f'{cookie.name}={cookie.value}'
+            path = os.getcwd() + '/' + arch_id
+            if (not os.path.isdir(path) ):
+                os.mkdir(path)
 
-    path = os.getcwd() + '/' + arch_id
-    if (not os.path.isdir(path) ):
-        os.mkdir(path)
+            soup = bs(main_response.text,'html.parser')
 
-    soup = bs(main_response.text,'html.parser')
-
-    with open(path + '/desc' + '.html', 'w') as f:
-        f.write(str(soup.find(class_='well')))
-else:
-    print('Ошибка! Возможно неверно указан номер дела')
+            with open(path + '/desc' + '.html', 'w') as f:
+                f.write(str(soup.find(class_='well')))
+            break
+        else:
+            print('Дело не найдено! Возможно неверно указан номер дела')
+            continue
 
 # Document`s first page number handling
 while True:
