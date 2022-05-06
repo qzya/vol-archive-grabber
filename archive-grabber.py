@@ -91,4 +91,13 @@ def get_images(arch_id, pages_range):
 if __name__ == "__main__":
     get_images(prepare_dirs(), handle_inputs())
 
-exit()
+# quit confirmation
+while True:
+    ex = input('Еще раз?\n Введите "да "- для продолжения или "нет" - для выхода из программы.)\n').lower()
+    if (ex == 'нет' or ex == '"нет"'):
+        os._exit(0)
+    if (ex == 'да' or ex == '"да"'):
+        get_images(prepare_dirs(), handle_inputs())
+    else:
+        continue
+
