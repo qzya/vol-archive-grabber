@@ -10,6 +10,7 @@ git clone https://github.com/qzya/vol-archive-grabber.git
 ```
 
 ## Как пользоваться?
+0. На [сайте архива](https://gosarchive.gov35.ru/archive) найдите оцифрованное дело, которое необходимо скачать.
 1. Запустите скрипт из директории vol-archive-grabber: файлы архива будут сохранятся именно в ту директорию, из которой был запущен скрипт.
 ```
 cd vol-archive-grabber
